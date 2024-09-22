@@ -27,6 +27,13 @@ namespace dotnetbackened
                 return client.GetDatabase(mongoDbSettings.DatabaseName);
             });
 
+            builder.Services.AddStackExchangeRedisCache(options =>
+            {
+                options.Configuration = "localhost:6379"; // Redis server address
+                options.InstanceName = "SampleInstance:";
+            });
+
+
             builder.Services.AddScoped<IWeatherRepository, WeatherRepository>();
 
             builder.Services.AddScoped<PortugalWeatherUseCase>();

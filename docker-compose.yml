@@ -8,3 +8,9 @@ services:
             - "27017:27017"
         volumes:
             - ./data:/data/db
+
+    redis-test:
+        image: redis:6.2.3
+        container_name: redis-test
+        ports:
+            - "6379:6379"
