@@ -1,4 +1,5 @@
 using dotnetbackened.adapters.apis;
+using dotnetbackened.adapters.middlewares;
 using dotnetbackened.adapters.repositories;
 using dotnetbackened.adapters.settings;
 using dotnetbackened.application.factories;
@@ -52,7 +53,9 @@ namespace dotnetbackened
                 app.UseSwaggerUI();
             }
 
-            
+            app.UseMiddleware<RequestLoggingMiddleware>();
+
+
             app.UseHttpsRedirection();
             app.UseAuthorization();
 
