@@ -54,10 +54,11 @@ namespace dotnetbackened
                 return client.GetDatabase(mongoDbSettings.DatabaseName);
             });
 
+            var redisSettings = builder.Configuration.GetSection("Redis").Get<RedisSettings>();
             builder.Services.AddStackExchangeRedisCache(options =>
             {
-                options.Configuration = "localhost:6379"; // Redis server address
-                options.InstanceName = "SampleInstance:";
+                options.Configuration = redisSettings.Configuration; // Redis server address
+                options.InstanceName = redisSettings.InstanceName;
             });
 
 

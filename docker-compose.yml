@@ -14,3 +14,17 @@ services:
         container_name: redis-test
         ports:
             - "6379:6379"
+
+    backend-app:
+        build:
+            context: ./dotnetbackened
+            dockerfile: Dockerfile
+        container_name: backend-app
+        ports:
+            - "127.0.0.1:3000:80"
+        depends_on:
+            - mongodb-test
+            - redis-test
+        environment:
+            - ASPNETCORE_ENVIRONMENT=Container
+        
