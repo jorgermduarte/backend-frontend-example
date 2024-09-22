@@ -80,7 +80,7 @@ namespace dotnetbackened.application.usecases
             }
             else
             {
-                return "City not found";
+                throw new KeyNotFoundException();
             }
         }
 

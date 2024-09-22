@@ -29,7 +29,7 @@ namespace dotnetbackened.adapters.controllers
         {
             var weatherUseCase = _weatherUseCaseFactory.Create(country);
             var weatherResult = await weatherUseCase.DeleteWeather(country,city, hour);
-            return weatherResult ? Ok("Deleted Successfully") : NotFound();
+            return weatherResult ? Ok("Deleted Successfully") : throw new KeyNotFoundException();
         }
 
     }
