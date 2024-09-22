@@ -38,7 +38,7 @@ namespace dotnetbackened.application.usecases
 
                 var dataInCache = await _redisService.GetStringAsync(redisKey);
 
-                if(dataInCache != null)
+                if(!String.IsNullOrEmpty(dataInCache))
                 {
                     return dataInCache;
                 }
