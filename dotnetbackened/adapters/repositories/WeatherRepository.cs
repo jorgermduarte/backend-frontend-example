@@ -4,7 +4,7 @@ using MongoDB.Driver;
 
 namespace dotnetbackened.adapters.repositories
 {
-    public class WeatherRepository : IWeatherRepository 
+    public class WeatherRepository : IWeatherRepository
     {
         private readonly IMongoCollection<Weather> _weatherCollection;
 
@@ -42,6 +42,23 @@ namespace dotnetbackened.adapters.repositories
         {
             await _weatherCollection.InsertOneAsync(weather);
             return weather;
+        }
+
+        public async Task<bool> DeleteWeather(string country, string city, int hour)
+        {
+            var today = DateTime.Now.Date;
+
+            var filter = Builders<Weather>.Filter.And(
+                Builders<Weather>.Filter.Eq(w => w.City, city),
+                Builders<Weather>.Filter.Eq(w => w.Country, country),
+                Builders<Weather>.Filter.Eq(w => w.Date, today),
+                Builders<Weather>.Filter.ElemMatch(w => w.HourlyWeather, hw => hw.Hour == hour)
+            );
+
+            var update = Builders<Weather>.Update.PullFilter(w => w.HourlyWeather, hw => hw.Hour == hour);
+            var result = await _weatherCollection.UpdateOneAsync(filter, update);
+
+            return result.ModifiedCount > 0;
         }
 
     }

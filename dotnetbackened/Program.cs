@@ -6,6 +6,7 @@ using dotnetbackened.application.factories;
 using dotnetbackened.application.factories.interfaces;
 using dotnetbackened.application.usecases;
 using dotnetbackened.enterprise.interfaces;
+using Microsoft.OpenApi.Models;
 using MongoDB.Driver;
 
 namespace dotnetbackened
@@ -19,6 +20,31 @@ namespace dotnetbackened
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+            // add swagger basic authentication possiblity
+            builder.Services.AddSwaggerGen(c =>
+            {
+                    c.AddSecurityDefinition("basic", new OpenApiSecurityScheme
+                    {
+                        Type = SecuritySchemeType.Http,
+                        Scheme = "basic",
+                        Description = "Input your username and password to access this API"
+                    });
+                    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                    {
+                        {
+                            new OpenApiSecurityScheme
+                            {
+                                Reference = new OpenApiReference
+                                {
+                                    Type = ReferenceType.SecurityScheme,
+                                    Id = "basic"
+                                }
+                            },
+                            new string[] {}
+                        }
+                    });
+                }); 
 
             var mongoDbSettings = builder.Configuration.GetSection("MongoDB").Get<MongoDbSettings>();
             builder.Services.AddSingleton<IMongoClient>(sp => new MongoClient(mongoDbSettings.ConnectionString));

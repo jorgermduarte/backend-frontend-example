@@ -29,7 +29,8 @@ namespace dotnetbackened.application.usecases
             {
                 var currentHour = DateTime.Now.Hour;
                 var currentDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
-                var country = "Portugal";
+                var country = "spain";
+
                 HourlyWeather? resultWeatherData = null;
 
                 // * check if the city is in the cache
@@ -80,6 +81,18 @@ namespace dotnetbackened.application.usecases
             else
             {
                 return "City not found";
+            }
+        }
+
+        public Task<bool> DeleteWeather(string country, string city, int hour)
+        {
+            if (_spainCitiesLowered.Contains(city.ToLower()))
+            {
+                return _weatherRepository.DeleteWeather(country.ToLower(), city.ToLower(), hour);
+            }
+            else
+            {
+                return Task.FromResult(false);
             }
         }
     }
